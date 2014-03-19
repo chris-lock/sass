@@ -1,0 +1,233 @@
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en" > <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8 gt-ie6" lang="en" > <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9 gt-ie7 gt-ie6 lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js gt-ie9 gt-ie8 gt-ie7 gt-ie6" lang="en"> <!--<![endif]-->
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="description" content="">
+		<meta name="viewport" content="initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+		<meta name="format-detection" content="telephone=no">
+
+		<title>Columns</title>
+
+		<link rel="stylesheet" href="_css/columns.css">
+	</head>
+
+	<body>
+		<section class="example">
+			<div class="example-intro">
+				<h1>Columns</h1>
+
+				<p>
+					Columns must always be wrapped inside a column-wrapper and will need both the column and column-width mixin if in a row with other columns. We use columns that have half the column gutter on the right and the left. This means we don't need a first or last class. Also, using box-sizing: border-box and fixed gutters allows us to easily nest columns. Adding a border directly to a column will make it too wide for the grid since there is already padding on there. Use the column-border mixin instead.
+				</p>
+			</div>
+
+			<div class="example-columns">
+				<div class="example-column-wrapper">
+					<div class="example-column-grid">
+						<div class="example-column-grid-column"></div>
+						<div class="example-column-grid-column"></div>
+						<div class="example-column-grid-column"></div>
+						<div class="example-column-grid-column"></div>
+						<div class="example-column-grid-column"></div>
+						<div class="example-column-grid-column"></div>
+						<div class="example-column-grid-column"></div>
+						<div class="example-column-grid-column"></div>
+						<div class="example-column-grid-column"></div>
+						<div class="example-column-grid-column"></div>
+						<div class="example-column-grid-column"></div>
+						<div class="example-column-grid-column"></div>
+					</div><!-- .example-column-grid -->
+
+					<div class="example-code">
+						<pre>
+							.example-columns {
+								<span class="tab mixin">column-wrapper()</span>
+							}<br/>
+							<span class="comment">column-wrapper() must be included at every breakpoint to reset $column-margin.</span><br/>
+						</pre>
+					</div>
+
+					<div class="example-column-row">
+						<div class="example-column-box example-column">
+							<div class="example-code">
+								<pre>
+									.example-column {
+										<span class="tab mixin">column()</span>
+										<span class="tab attribute attribute-standard"><span class="mixin">column-width(3, 12)</span></span>
+										<span class="tab attribute attribute-medium"><span class="mixin">column-width(4, 12)</span></span>
+										<span class="tab attribute attribute-small"><span class="mixin">column-width(6, 12)</span></span>
+									}
+								</pre>
+							</div>
+						</div>
+
+						<div class="example-column-box example-column">
+							<div class="example-code">
+								<pre>
+									<span class="comment">column-width() must be included at every breakpoint to reset $column-gutter.</span>
+								</pre>
+							</div>
+						</div>
+						
+						<div class="example-column-box example-column"></div>
+
+						<div class="example-column-box example-column"></div>
+					</div><!-- .example-column-row -->
+
+					<div class="example-column-box example-column measurement-column measurement-column-wrapper">
+						<div class="example-code">
+							<pre>
+								The padding of the column-wrapper() plus the padding of the column-width() add up to equal the outer margin of the columns.
+							</pre>
+						</div>
+					</div>
+					
+					<div class="example-column-box example-column measurement-column"></div>
+
+					<div class="example-column-box example-column measurement-column measurement-column-width">
+						<div class="example-code">
+							<pre>
+								The padding of the column-width() is half the column gutter so adjacent columns produce the gutter width.
+							</pre>
+						</div>
+					</div>
+
+					<div class="example-column-box offset">
+						<div class="example-code">
+							<pre>
+								.offset {
+									<span class="tab mixin">column-offset(1, 12, left)</span>
+									<span class="tab mixin">column-offset(1, 12, right)</span>
+								}
+							</pre>
+						</div>
+					</div>
+
+					<div class="example-column-box offset">
+						<div class="include-gutter">
+							<div class="example-code">
+								<pre>
+									.include-gutter {
+										<span class="tab mixin">column-include-gutter()</span>
+									}
+								</pre>
+							</div>
+						</div>
+					</div>
+
+					<div class="example-column-box example-column nested-1">
+						<div class="example-code">
+							<pre>
+								.nested-1 {
+									<span class="tab mixin">column()</span>
+									<span class="tab mixin">column-width(8, 12, true)</span>
+								}
+							</pre>
+						</div>
+
+						<div class="example-column-box example-column nested-2">
+							<div class="example-code">
+								<pre>
+									.nested-2 {
+										<span class="tab mixin">column()</span>
+										<span class="tab mixin">column-width(4, 8)</span>
+									}
+								</pre>
+							</div>
+						</div>
+
+						<div class="example-column-box example-column nested-2"></div>
+					</div>
+					
+					<div class="example-column-box column-border column-border-bad">
+						<div class="example-code">
+							<pre>
+								.bad-column-border {
+									<span class="tab attribute attribute-global"><span class="parameter">border-top:</span> 5px solid red</span>
+								}
+							</pre>
+						</div>
+					</div>
+
+					<div class="example-column-box column-border column-border-good">
+						<div class="example-code">
+							<pre>
+								.good-column-border {
+									<span class="tab mixin">column-border(top, 5px, green)</span>
+								}
+							</pre>
+						</div>
+					</div>
+
+					<div class="text-columns">
+						<div class="example-column-box text-column nth-child-4n-plus-1">
+							<p class="description">
+								Nullam interdum, mauris ut porta pharetra, est nisl semper elit, eget tincidunt sem dolor id lectus. Etiam consequat ipsum eu elit lobortis tincidunt.
+							</p>
+						</div>
+
+						<div class="example-column-box text-column">
+							<p class="description">
+								Suspendisse euismod mauris in arcu placerat, at consectetur lacus vestibulum. Pellentesque ornare congue urna, nec placerat ipsum eleifend eu. Morbi placerat convallis volutpat. Fusce dictum leo at sapien luctus convallis. Ut rutrum venenatis mauris, quis interdum elit feugiat et. Etiam tortor turpis, sodales sed dolor a, sagittis mollis sem.
+							</p>
+						</div>
+
+						<div class="example-column-box text-column nth-child-2n-plus-1">
+							<div class="example-code">
+								<pre class="attribute attribute-small">
+									.nth-child-2n-plus-1 {
+										<span class="tab mixin">column-row-break()</span>
+									}
+								</pre>
+							</div>
+							<p class="description">
+								Nullam interdum, nisl semper elit, eget tincidunt sem dolor id lectus. Etiam consequat ipsum eu elit lobortis tincidunt. Nullam faucibus tempor tortor, id imperdiet magna vestibulum ut. Suspendisse euismod mauris in arcu placerat, at consectetur lacus vestibulum.
+							</p>
+						</div>
+
+						<div class="example-column-box text-column nth-child-3n-plus-1">
+							<div class="example-code">
+								<pre class="attribute attribute-medium attribute-small">
+									.nth-child-3n-plus-1 {
+										<span class="tab mixin attribute attribute-medium">column-row-break()</span>
+										<span class="tab mixin attribute attribute-small">column-row-break(false)</span>
+									}
+								</pre>
+							</div>
+							<p class="description">
+								Nullam interdum, mauris ut porta pharetra, est nisl semper elit, eget tincidunt sem dolor id lectus. Etiam consequat ipsum eu elit lobortis.
+							</p>
+						</div>
+
+						<div class="example-column-box text-column nth-child-4n-plus-1 nth-child-2n-plus-1">
+							<div class="example-code">
+								<pre>
+									.nth-child-4n-plus-1 {
+										<span class="tab mixin attribute attribute-standard">column-row-break()</span>
+										<span class="tab mixin attribute attribute-medium attribute-small">column-row-break(false)</span>
+									}<span class="attribute attribute-small"><br/>
+
+									.nth-child-2n-plus-1 {
+										<span class="tab mixin">column-row-break()</span>
+									}</span>
+								</pre>
+							</div>
+							<p class="description">
+								Nullam interdum, mauris ut porta pharetra, est nisl semper elit.
+							</p>
+						</div>
+
+						<div class="example-column-box text-column">
+							<p class="description">
+								Nullam interdum, mauris ut porta pharetra, est nisl semper elit, eget tincidunt sem dolor id lectus. Etiam consequat ipsum eu elit lobortis tincidunt.
+							</p>
+						</div>
+					</div><!-- .text-columns -->
+				</div><!-- .example-column-wrapper -->
+			</div><!-- .example-columns -->
+		</section>
+	</body>
+</html>

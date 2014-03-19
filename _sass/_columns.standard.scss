@@ -1,0 +1,310 @@
+//	_columns.medium.scss
+
+@import "_mixins";
+
+//	-----------------------------------------------------------------------------
+//	Table of Contents (keep up-to-date)
+//	-----------------------------------------------------------------------------
+//
+//	_.example
+//	_.example-columns
+//		_.example-column-grid
+//			_.example-column-grid
+//				_.example-column
+//					_.example-code
+//
+//	-----------------------------------------------------------------------------
+	
+	body,
+	html {
+		font-family: "Univers LT Std", "Univers", "Helvetica", "Arial", sans-serif;
+		font-weight: 200;
+		margin: 0;
+		padding: 0;
+	}
+
+	h1,
+	p {
+		font-size: 16px;
+		line-height: 24px;
+		margin: 0 0 10px;
+	}
+
+	h1 {
+		color: #777;
+		font-weight: 400;
+	}
+
+	p {
+		color: #999;
+	}
+
+//	-----------------------------------------------------------------------------
+//	_.example
+//	-----------------------------------------------------------------------------	
+	.example {
+		@include column-wrapper();
+		@include column-wrapper-border(top, 1px, #999);
+		margin-bottom: 80px;
+		margin-top: 20px;
+		padding-top: 20px;
+		position: relative;
+	}
+
+		.example-intro {
+			@include column-width(12, 12);
+		}
+
+//	-----------------------------------------------------------------------------
+//	_.example-columns
+//	-----------------------------------------------------------------------------
+	.example-columns {
+		@include column-wrapper();
+		margin-bottom: 20px;
+		margin-left: -$column-margin;
+		margin-right: -$column-margin;
+		margin-top: 20px;
+		padding-bottom: 20px;
+		padding-top: 20px;
+		position: relative;
+	}
+
+		.example-column-wrapper {
+			@include clearfix();
+		}
+
+	//	_.example-columns
+	//	-----------------------------------------------------------------------------
+		.example-columns,
+		.example-columns:before,
+		.example-column-wrapper,
+		.example-column-wrapper:before,
+		.example-column-box,
+		.example-column-box:after,
+		.include-gutter {
+			@include box-shadow(0 0 1px #000 inset);
+			@include border-radius(5px);
+			background: rgba(0, 0, 0, 0.15);
+		}
+
+		.example-columns,
+		.example-column-wrapper,
+		.example-column-box {
+			position: relative;
+		}
+
+		.example-columns:before,
+		.example-column-wrapper:before,
+		.example-column-box:after {
+			@include pseudo();
+		}
+
+		//	_.example-column-grid
+		//	-----------------------------------------------------------------------------
+			.example-column-grid {
+				bottom: -20px;
+				overflow: hidden;
+				position: absolute;
+				top: -20px;
+				width: 100%;
+			}
+
+				.example-column-grid-column {
+					@include column();
+					@include column-width(1, 12);
+					height: 999999em;
+					position: relative;
+
+					&:before {
+						@include pseudo();
+						background: rgba(0, 0, 0, 0.05);
+						height: 100%;
+						left: $column-gutter / 2;
+						right: $column-gutter / 2;
+					}
+				}
+
+		//	_.example-column-grid
+		//	-----------------------------------------------------------------------------
+			.example-column-row {
+				height: 200px;
+				overflow: hidden;
+
+				.example-column {
+					height: 200px;
+				}
+			}
+
+				.example-column-box {
+					padding-bottom: 10px;
+					padding-top: 10px;
+
+					&:after {
+						bottom: 10px;
+						left: $column-gutter / 2;
+						right: $column-gutter / 2;
+						top: 10px;
+					}
+				}
+
+			//	_.example-column
+			//	-----------------------------------------------------------------------------
+				.example-column {
+					@include column();
+					@include column-width(3, 12);
+					min-height: 200px;
+				}
+
+				.measurement-column {
+					@include column-width(4, 12);
+					position: relative;
+
+					&.measurement-column-wrapper,
+					&.measurement-column-width {
+						&:before {
+							@include pseudo();
+							@include border-radius(5px);
+							background: rgba(255, 0, 0, 0.5);
+							height: 100px;
+							top: 0;
+						}
+					}
+
+					&.measurement-column-wrapper {
+						clear: both;
+
+						&:before {
+							left: -$column-wrapper-margin + ($column-gutter / 2);
+							width: $column-wrapper-margin;
+						}
+					}
+
+					&.measurement-column-width {
+						&:before {
+							left: -$column-gutter + ($column-gutter / 2);
+							width: $column-gutter;
+						}
+					}
+				}
+
+				.include-gutter {
+					@include column-include-gutter();
+					background: rgba(255, 255, 255, 0.75);
+				}
+
+				.offset {
+					@include column-offset(1, 12, left);
+					@include column-offset(1, 12, right);
+					clear: both;
+					width: auto;
+				}
+
+				.nested-1 {
+					@include column-width(10, 12, true);
+					
+					&:after {
+						left: 0;
+						right: 0;
+					}
+				}
+
+				.nested-2 {
+					@include column-width(5, 10);
+				}
+
+				.column-border {
+					@include column-width(12, 12);
+				}
+
+				.column-border-bad {
+					border-top: 5px solid red;
+					clear: both;
+				}
+
+				.column-border-good {
+					@include column-border(top, 5px, green);
+				}
+
+				.text-column {
+					@include column();
+					@include column-width(3, 12);
+
+					&.nth-child-4n-plus-1 {
+						@include column-row-break(true);
+					}
+
+					.description {
+						color: #000;
+						font-size: 12px;
+						line-height: 16px;
+					}
+				}
+
+				//	_.example-code
+				//	-----------------------------------------------------------------------------
+					.example-code {
+						pre {
+							clear: both;
+							font-family: monospace;
+							font-size: 12px;
+							line-height: 16px;
+							margin: 0;
+							padding: 10px 0;
+							white-space: normal;
+						}
+
+						.tab {
+							display: block;
+							padding-left: 20px;
+						}
+
+						.attribute {
+							display: none;
+							line-height: 13px;
+						}
+
+						.attribute-standard,
+						.attribute-global {
+							display: block;
+						}
+
+						.parameter {
+							color: #0000ff;
+							display: inline-block;
+						}
+
+						.mixin,
+						.mixin-definition {
+							color: #ff0000;
+						}
+
+						.mixin {
+							&:before {
+								content: "@include ";
+							}
+
+							&:after {
+								content: ";";
+							}
+						}
+
+						.mixin-definition {
+							&:before {
+								content: "@mixin ";
+							}
+						}
+
+						.conditional {
+							&:before {
+								content: "@";
+							}
+						}
+
+						.comment {
+							color: #555;
+
+							&:before {
+								content: "// ";
+							}
+						}
+					}
