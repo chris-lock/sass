@@ -1,0 +1,633 @@
+//	_mixins.scss
+
+//	-----------------------------------------------------------------------------
+//	
+//	A set of practical mixins.
+//	
+//	@author Chris Lock
+//	
+//	-----------------------------------------------------------------------------
+//	Table of Contents (keep up-to-date)
+//	-----------------------------------------------------------------------------
+//	
+//	_functions
+//		_get-column-margin()
+//	_media-queries
+//		_breakpoint()
+//		_webkit-only()
+//		_retina()
+//	_typography
+//		_font()
+//		_word-break()
+//	_layout
+//		_pseudo()
+//		_image-replacement()
+//		_horizontal-center()
+//		_vertical-center()
+//		_vertical-center-relative()
+//		_clearfix()
+//		_full-size-absolute()
+//		_sprite()
+//	_columns
+//		_column-border-base()
+//		_column-wrapper()
+//		_column-wrapper-border()
+//		_column()
+//		_column-row-break()
+//		_column-base()
+//		_column-width()
+//		_column-offset()
+//		_column-border()
+//		_column-include-gutter()
+//		_column-auto-height($is-print)
+//	_forms
+//		_input()
+//		_placeholder()
+//		_submit()
+//	_css3
+//		_vendor-prefix()
+//		_background-size()
+//		_border-radius()
+//		_box-shadow()
+//		_box-sizing()
+//	_patterns
+//		_class-set()
+//		_sprite-set()
+//		_breakpoint-set()
+//	
+//	-----------------------------------------------------------------------------
+
+//	-----------------------------------------------------------------------------
+//	_functions
+//	-----------------------------------------------------------------------------
+
+	//	_get-column-margin()
+	//	-----------------------------------------------------------------------------
+		@function get-column-margin($column-wrapper-margin, $column-gutter) {
+			//	The column margin is the distance from the container
+			//	to the edge of the column. Since the column already
+			//	includes half of the gutter on either side, we need
+			//	to remove it.
+			$column-half-gutter: $column-gutter * .5;
+			$column-margin: $column-wrapper-margin - $column-half-gutter;
+
+			@return $column-wrapper-margin - $column-half-gutter;
+		}
+
+//	-----------------------------------------------------------------------------
+//	_media-queries
+//	-----------------------------------------------------------------------------
+	
+	//	The distance between the edge of the page and the edge of the outer column.
+	$column-wrapper-margin: 32px;
+	//	The distance between columns.
+	$column-gutter: 32px;
+	//	The column margin is the distance from the container to the edge of the 
+	//	column element. Since the column already includes half of the gutter on 
+	//	either side, we need to remove it.
+	$column-margin: get-column-margin($column-wrapper-margin, $column-gutter);
+
+	//	_breakpoint()
+	//	-----------------------------------------------------------------------------
+		//	Useful for maintaining your breakpoint locations in a single 
+		//	location. Reset breakpoint specific variables inside each 
+		//	conditional, and include the mixins files at the top of each file
+		//	since SASS does not currently have variable scope.
+		@mixin breakpoint($breakpoint-type) {
+			@if $breakpoint-type == medium {
+				@media screen and (max-width: 1024px) {
+					$column-wrapper-margin: 30px;
+					$column-gutter: 30px;
+					$column-margin: get-column-margin($column-wrapper-margin, $column-gutter);
+					
+					@content;
+				}
+			}
+			@else if $breakpoint-type == small {
+				@media screen and (max-width: 767px) {
+					$column-wrapper-margin: 20px;
+					$column-gutter: 20px;
+					$column-margin: get-column-margin($column-wrapper-margin, $column-gutter);
+
+					@content;
+				}
+			}
+		}
+
+	//	_webkit-only()
+	//	-----------------------------------------------------------------------------
+		//	Targets webkit browsers only. Useful when styling selects since only
+		//	webkit supports some styling there.
+		@mixin webkit-only() {
+			@media screen and (-webkit-min-device-pixel-ratio: 1) {
+				@content;
+			}
+		}
+
+	//	_retina()
+	//	-----------------------------------------------------------------------------
+		//	Targets retina devices.
+		@mixin retina() {
+			@media
+				only screen and (-webkit-min-device-pixel-ratio: 2),
+				only screen and ( min--moz-device-pixel-ratio: 2),
+				only screen and ( -o-min-device-pixel-ratio: 2/1),
+				only screen and ( min-device-pixel-ratio: 2),
+				only screen and ( min-resolution: 192dpi),
+				only screen and ( min-resolution: 2dppx) {
+				@content;
+			}
+		}
+
+//	-----------------------------------------------------------------------------
+//	_typography
+//	-----------------------------------------------------------------------------
+
+	//	_font()
+	//	-----------------------------------------------------------------------------
+		//	When using @font-face, IE8 requires that each weight and style 
+		//	combination have it's own unique font-family. You will need to
+		//	swap Univers below for whatever your font name is and name your 
+		//	fonts fontName-fontWeight-fontStyle, i.e.
+		//		Univers-400-normal
+		//		Univers-400-bold
+		//		Univers-400-italics
+		//	http://blog.typekit.com/2011/06/27/new-from-typekit-variation-specific-font-family-names-in-ie-6-8/
+		@mixin font($weight: 400, $style: normal) {
+			$name: Univers;
+			$font-family: #{$name}-#{$weight}-#{$style};
+			$font-style: $style;
+			$font-weight: $weight;
+
+			font-family: "#{$font-family}", "Helvetica", "Arial", san-serif;
+			font-style: $font-style;
+			font-weight: $font-weight;
+		}
+
+	//	_word-break()
+	//	-----------------------------------------------------------------------------
+		//	Breaks long words when then extend past the container.
+		@mixin word-break() {
+			word-break: break-all;
+			-ms-word-break: break-all;
+			word-break: break-word;
+			hyphens: auto;
+			-moz-hyphens: auto;
+			-webkit-hyphens: auto;
+		}
+
+//	-----------------------------------------------------------------------------
+//	_layout
+//	-----------------------------------------------------------------------------
+	
+	//	_pseudo()
+	//	-----------------------------------------------------------------------------
+		//	Use for :before and :after. The parent will need to be
+		//	position relative.
+		@mixin pseudo() {
+			content: "";
+			display: block;
+			position: absolute;
+		}
+
+	//	_image-replacement()
+	//	-----------------------------------------------------------------------------
+		//	Use to hide text when links are only icons.
+		@mixin image-replacement() {
+			display: block;
+			text-indent: -9999em;
+			overflow: hidden;
+		}
+
+	//	_horizontal-center()
+	//	-----------------------------------------------------------------------------
+		//	Use to horizontally center a :before and :after. The parent will need
+		//	to be position relative.
+		@mixin horizontal-center($width, $margin-left: false) {
+			@if ($margin-left == false) {
+				$margin-left: -$width / 2;
+			}
+
+			left: 50%;
+			margin-left: $margin-left;
+			position: absolute;
+			width: $width;
+		}
+
+	//	_vertical-center()
+	//	-----------------------------------------------------------------------------
+		//	Use to vertically center a :before and :after. The parent will need
+		//	to be position relative.
+		@mixin vertical-center($height, $margin-top: false) {
+			@if ($margin-top == false) {
+				$margin-top: -$height / 2;
+			}
+
+			height: $height;
+			margin-top: $margin-top;
+			position: absolute;
+			top: 50%;
+		}
+
+	//	_vertical-center-relative()
+	//	-----------------------------------------------------------------------------
+		//	Use to vertically center dynamic amounts of text in a parent
+		//	container. You will need to add this to the parent element and pass
+		//	the child selector in as a parameter.
+		@mixin vertical-center-relative($child-class) {
+			display: table;
+
+			.#{$child-class} {
+				display: table-cell;
+				vertical-align: middle;
+			}
+		}
+
+	//	_clearfix()
+	//	-----------------------------------------------------------------------------
+		//	Generic clearfix to make a parent stretch to contain floated children.
+		@mixin clearfix() {
+			&:before,
+			&:after {
+				content: "\0020";
+				display: block;
+				height: 0;
+				overflow: hidden;
+			}
+
+			&:after {
+				clear: both;
+			}
+		}
+
+	//	_full-size-absolute()
+	//	-----------------------------------------------------------------------------
+		//	Useful when you need an absolute positioned child to be maintain the 
+		//	dimensions of it's parent.
+		@mixin full-size-absolute() {
+			bottom: 0;
+			left: 0;
+			position: absolute;
+			right: 0;
+			top: 0;
+		}
+
+	//	_sprite()
+	//	-----------------------------------------------------------------------------
+		//	Mixin for creating retina supported background sprites. The 
+		//	img-directory variable should be updated to match the relative or 
+		//	absolute path pointing to the location of the sprites. This  assumes 
+		//	that for each sprite you have a non-retina and retina version that 
+		//	have to same aspect ratio name fileName.extension and 
+		//	fileName@2x.extension following the iOS convention, i.e.
+		//		@include sprite(ico-social, 20px 200px);
+		//		ico-social.png		20px X 200px
+		//		ico-social@2x.png	40px X 400px
+		//		@include sprite(ico-contact, 30px 150px, jpg);
+		//		ico-contact.jpg		30px X 150px
+		//		ico-contact@2x.jpg	60px X 300px
+		//	Non-retina assest are loaded by default to save bandwidth.
+		@mixin sprite($sprite, $size, $file-extension: png) {
+			$img-directory: /_img;
+
+			background-image: url(#{$img-directory}/#{$sprite}.#{$file-extension});
+			background-repeat: no-repeat;
+
+			@include retina() {
+				@include background-size(#{$size});
+				background-image: url(#{$img-directory}/#{$sprite}@2x.#{$file-extension});
+			}
+		}
+
+//	-----------------------------------------------------------------------------
+//	_columns
+//	-----------------------------------------------------------------------------
+
+	//	_column-border-base()
+	//	-----------------------------------------------------------------------------
+		//	This base for both column-border() and column-wrapper-border() used
+		//	to add the pseudo element.
+		@mixin column-border-base($top-or-bottom, $height, $color) {
+			&:before {
+				@if ($top-or-bottom == top) {
+					top: 0px;
+				}
+				@else {
+					bottom: 0px;
+				}
+
+				@include pseudo();
+				background: $color;
+				height: $height;
+			}
+		}
+
+	//	_column-wrapper()
+	//	-----------------------------------------------------------------------------
+		//	Use this wrapper when including columns.
+		@mixin column-wrapper() {
+			//	The column margin is the distance from the container to the edge
+			//	of the column. Since the column already includes half of the
+			//	gutter on either side, we need to remove it.
+			$column-half-gutter: $column-gutter * .5;
+
+			@include clearfix();
+			margin-left: auto;
+			margin-right: auto;
+			max-width: 1000px + ($column-half-gutter * 2);
+			padding-left: $column-margin;
+			padding-right: $column-margin;
+		}
+
+	//	_column-wrapper-border()
+	//	-----------------------------------------------------------------------------
+		//	This allows you to add a border to the top or bottom of a column
+		//	since a the padding would make it too wide for the grid.
+		@mixin column-wrapper-border($top-or-bottom, $height, $color, $offset: $column-wrapper-margin) {
+			@include column-border-base($top-or-bottom, $height, $color);
+
+			&:before {
+				left: $offset;
+				right: $offset;
+			}
+		}
+
+	//	_column()
+	//	-----------------------------------------------------------------------------
+		//	Use if multiple columns are in a row. Adds float: right; of float:
+		//	left; for columns.
+		@mixin column($side: left) {
+			float: $side;
+		}
+
+	//	_column-row-break()
+	//	-----------------------------------------------------------------------------
+		//	If you need to start a new row of columns add this mixin.
+		@mixin column-row-break($set: true) {
+			$clear: both;
+
+			@if ($set == false) {
+				$clear: none;
+			}
+
+			clear: $clear;
+		}
+
+	//	_column-base()
+	//	-----------------------------------------------------------------------------
+		//	Base class for column-width and column-offset.
+		@mixin column-base($nested) {
+			//	If we're not nesting columns inside this element, it should have
+			//	half the gutter width on either side. This prevents us from
+			//	needing to remove the gutter from the right column. box-sizing
+			//	allows us to minimize calculations and nest columns.
+
+			$column-half-gutter: $column-gutter * .5;
+
+			@if ($nested != false) {
+				$column-half-gutter: 0;
+			}
+
+			@include box-sizing(border-box);
+			padding-left: $column-half-gutter;
+			padding-right: $column-half-gutter;
+			position: relative;
+		}
+
+	//	_column-width()
+	//	-----------------------------------------------------------------------------
+		//	Simply adds the width and padding need for the column width.
+		@mixin column-width($column-count, $column-total, $nested: false) {
+			@include column-base($nested);
+			display: block;
+			width: $column-count / $column-total * 100%;
+		}
+
+	//	_column-offset()
+	//	-----------------------------------------------------------------------------
+		//	Only adds margin and padding to offset an element in increments of
+		//	the grid.
+		@mixin column-offset($column-count, $column-total, $side, $nested: false) {
+			@include column-base($nested);
+			margin-#{$side}: $column-count / $column-total * 100%;
+		}
+
+	//	_column-border()
+	//	-----------------------------------------------------------------------------
+		//	This allows you to add a border to the top or bottom of a column
+		//	since a the padding would make it too wide for the grid.
+		@mixin column-border($top-or-bottom, $height, $color, $offset: $column-gutter / 2) {
+			@include column-border-base($top-or-bottom, $height, $color);
+			
+			&:before {
+				left: $offset;
+				right: $offset;
+			}
+		}
+
+	//	_column-include-gutter()
+	//	-----------------------------------------------------------------------------
+		//	Used inside a column to create an element that spans to the outside
+		//	of the gutter.
+		@mixin column-include-gutter() {
+			//	Should be used inside a column.
+			margin-left: - $column-gutter;
+			margin-right: - $column-gutter;
+		}
+
+	//	_column-auto-height()
+	//	-----------------------------------------------------------------------------
+		//	Makes column backgrounds all appear to be the same height. Parent
+		//	should be overflow hidden. The is-print variable should be included 
+		//	to avoid IE from print previewing an infinite number of pages.
+		//	http://css-tricks.com/fluid-width-equal-height-columns/
+		//	One True Layout Method
+		@mixin column-auto-height($is-print: true) {
+			@if $is-print != true {
+				margin-bottom: -9999em;
+				padding-bottom: 9999em;
+			}
+			@else {
+				margin-bottom: 0;
+				padding-bottom: 0;
+			}
+		}
+
+//	-----------------------------------------------------------------------------
+//	_forms
+//	-----------------------------------------------------------------------------
+
+	//	_input()
+	//	-----------------------------------------------------------------------------
+		//	Clears default styles and adds box-sizing.
+		@mixin input() {
+			@include box-sizing(border-box);
+			-webkit-appearance: none;
+			-moz-outline: none;
+			font-family: inherit;
+			outline: 0 none;
+		}
+
+	//	_placeholder()
+	//	-----------------------------------------------------------------------------
+		//	Allows you to style placeholder color across various browsers.
+		@mixin placeholder($color, $color-placeholder) {
+			color: $color;
+
+			&._placeholder {
+				color: $color-placeholder;
+			}
+
+			&::-webkit-input-placeholder {
+				color: $color-placeholder;
+			}
+
+			&:-moz-placeholder { /* Firefox 18- */
+				color: $color-placeholder;
+			}
+
+			&::-moz-placeholder {  /* Firefox 19+ */
+				color: $color-placeholder;
+			}
+
+			&:-ms-input-placeholder {
+				color: $color-placeholder;
+			}
+		}
+
+	//	_submit()
+	//	-----------------------------------------------------------------------------
+		//	Clears default styles to make submits render and function more like
+		//	links.
+		@mixin submit() {
+			-webkit-appearance: none;
+			-moz-outline: none;
+			cursor: pointer;
+			border: 0 none;
+			font-family: inherit;
+			font-style: inherit;
+			font-weight: inherit;
+			outline: 0 none;
+		}
+
+//	-----------------------------------------------------------------------------
+//	_css3
+//	-----------------------------------------------------------------------------
+	//	If you're using compass, don't include these.
+	
+	//	_vendor-prefix()
+	//	-----------------------------------------------------------------------------
+		//	Adds webkit and moz prefixes and o and ms optionally.
+		@mixin vendor-prefix($attrbute, $attribute-value, $o: false, $ms: false) {
+			-webkit-#{$attrbute}: #{$attribute-value};
+			-moz-#{$attrbute}: #{$attribute-value};
+			#{$attrbute}: #{$attribute-value};
+
+			@if ($o == true) {
+				-o-#{$attrbute}: #{$attribute-value};
+			}
+			@if ($ms == true) {
+				-ms-#{$attrbute}: #{$attribute-value};
+			}
+		}
+
+	//	_background-size()
+	//	-----------------------------------------------------------------------------
+		@mixin background-size($value) {
+			@include vendor-prefix(background-size, $value, true);
+		}
+
+	//	_border-radius()
+	//	-----------------------------------------------------------------------------
+		@mixin border-radius($value) {
+			@include vendor-prefix(border-radius, $value, true, true);
+		}
+
+	//	_box-shadow()
+	//	-----------------------------------------------------------------------------
+		@mixin box-shadow($value) {
+			@include vendor-prefix(box-shadow, $value);
+		}
+
+	//	_box-sizing()
+	//	-----------------------------------------------------------------------------
+		@mixin box-sizing($value) {
+			@include vendor-prefix(box-sizing, $value);
+		}
+
+//	-----------------------------------------------------------------------------
+//	_patterns
+//	-----------------------------------------------------------------------------
+	
+	//	_class-set()
+	//	-----------------------------------------------------------------------------
+		//	This is useful when a set of classes is consitently tied to a visual 
+		//	style, e.g. an icon set. For example, if you had a sprite file when 
+		//	the first icon was a phone icon, the second, an email icon, and so 
+		//	on. Adding this mixin to ul.contact li would produce:
+		//		ul.contact li {
+		//			background-image: url(/_img/ico-contact.png);
+		//			padding-left: 35px;
+		//		}
+		//		
+		//		ul.contact li.phone {
+		//			background-position: center 0;
+		//		}
+		//		
+		//		ul.contact li.email {
+		//			background-position: center -25px;
+		//		}
+		//		
+		//		ul.contact li.website {
+		//			background-position: center -50px;
+		//		}
+		//		
+		//		ul.contact li.location {
+		//			background-position: center -75px;
+		//		}
+		@mixin class-set() {
+			$sprite-increment-count: 0;
+			$sprite-offset: 25px;
+			$contact-types: (
+				phone,
+				email,
+				website,
+				location
+			);
+
+			background-image: url(/_img/ico-contact.png);
+			padding-left: 35px;
+
+			@each $contact-type in $contact-types {
+				&.#{$contact-type} {
+					&:before {
+						background-position: center #{-1 * $sprite-increment-count * $sprite-offset};
+						$sprite-increment-count: $sprite-increment-count + 1;
+					}
+				}
+			}
+		}
+
+	//	_sprite-set()
+	//	-----------------------------------------------------------------------------
+		//	An easy way to absract you srpite sets so your background offset 
+		//	isn't littered all over your css. Allowing you to change it's 
+		//	dimentsions without a substanial amount of updates.
+		@mixin sprite-set($offset-sprite: 0) {
+			$increment-sprite: -40px;
+			$offset-y: $offset-sprite * $increment-sprite;
+
+			background-image: url(/_img/ico-contact.png);
+			background-position: center $offset-y;
+			padding-left: 35px;
+		}
+
+	//	_breakpoint-set()
+	//	-----------------------------------------------------------------------------
+		//	A way to set up different images for different breakpoints. Assumes
+		//	you have images name fileName-breakpointName.extension.
+		@mixin breakpoint-set($breakpoint-type: standard) {
+			$file-name: ico-sprite-#{$breakpoint-type};
+
+			@include sprite(24px 24px, $file-name);
+		}
